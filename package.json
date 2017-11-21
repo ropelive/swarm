@@ -1,0 +1,22 @@
+{
+  "name": "rope-swarm",
+  "version": "0.0.1",
+  "description": "swarm: create multiple rope nodes",
+  "main": "swarm.js",
+  "repository": {
+    "type": "git",
+    "url": "github.com/ropelive/swarm"
+  },
+  "keywords": [
+    "kite",
+    "rpc",
+    "microservice",
+    "swarm"
+  ],
+  "author": "Gokmen Goksel",
+  "license": "MIT",
+  "dependencies": {
+    "@rope/node": "0.0.1",
+    "all-the-cities": "^2.0.0"
+  }
+}
