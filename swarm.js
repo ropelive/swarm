@@ -9,6 +9,7 @@ const ROPE_DEBUG = process.env.ROPE_DEBUG || 0
 const ROPE_SERVER = process.env.ROPE_SERVER || 'http://0.0.0.0:3210'
 
 const api = ['mod2', 'talk', 'greet', 'string', 'square', 'random']
+const types = ['firefox', 'safari', 'chrome', 'opera', 'edge', 'node.js', 'go']
 const Nodes = {}
 
 function rnd(max = NODES) {
@@ -19,12 +20,15 @@ class SwarmNode extends RopeNode {
   constructor(i) {
     const name = `${NAME}-${i}`
 
-    let region = cities[rnd(cities.length)]
+    let environment = types[rnd(types.length - 1)]
+    let region = cities[rnd(cities.length - 1)]
     region = {
       city: region.name,
       country: region.country,
       ll: [region.lat, region.lon],
     }
+
+    let title = `[${name} - ${environment}]`
 
     super(
       name,
@@ -38,6 +42,7 @@ class SwarmNode extends RopeNode {
       },
       {
         region,
+        environment,
         url: ROPE_SERVER,
         logLevel: ROPE_DEBUG,
       }
@@ -47,15 +52,15 @@ class SwarmNode extends RopeNode {
     let method, args
 
     setTimeout(() => {
-      console.log(`[${name}] Started from ${region.city} / ${region.country}`)
+      console.log(`${title} Started from ${region.city} / ${region.country}`)
 
       setInterval(() => {
         this.lifetime++
-        console.log(`[${name}] On cycle ${this.lifetime}/${MAX_REPEAT}`)
+        console.log(`${title} On cycle ${this.lifetime}/${MAX_REPEAT}`)
 
         if (this.lifetime >= MAX_REPEAT) {
           this.lifetime = 0
-          console.log(`[${name}] Died.`)
+          console.log(`${title} Died.`)
           this.disconnect()
           setTimeout(_ => {
             this.connect()
@@ -65,14 +70,14 @@ class SwarmNode extends RopeNode {
             method = `swarm.${api[rnd(api.length - 1)]}`
             args = rnd(10)
 
-            console.log(`[${name}] Calling ${method} with ${args}`)
+            console.log(`${title} Calling ${method} with ${args}`)
 
             this.tell('run', { method, args })
               .then(res =>
-                console.log(`[${name}] Got response for ${method}: ${res}`)
+                console.log(`${title} Got response for ${method}: ${res}`)
               )
               .catch(res =>
-                console.log(`[${name}] Call failed for ${method}: ${res}`)
+                console.log(`${title} Call failed for ${method}: ${res}`)
               )
           })
         }
