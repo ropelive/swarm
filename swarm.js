@@ -15,18 +15,21 @@ const Nodes = {}
 function rnd(max = NODES) {
   return Math.floor(Math.random() * max)
 }
+function getRandomRegion() {
+  let region = cities[rnd(cities.length - 1)]
+  return {
+    city: region.name,
+    country: region.country,
+    ll: [region.lat, region.lon],
+  }
+}
 
 class SwarmNode extends RopeNode {
   constructor(i) {
     const name = `${NAME}-${i}`
 
     let environment = types[rnd(types.length - 1)]
-    let region = cities[rnd(cities.length - 1)]
-    region = {
-      city: region.name,
-      country: region.country,
-      ll: [region.lat, region.lon],
-    }
+    let region = getRandomRegion()
 
     let title = `[${name} - ${environment}]`
 
@@ -61,8 +64,12 @@ class SwarmNode extends RopeNode {
         if (this.lifetime >= MAX_REPEAT) {
           this.lifetime = 0
           console.log(`${title} Died.`)
+          this.options.region = region = getRandomRegion()
           this.disconnect()
           setTimeout(_ => {
+            console.log(
+              `${title} Started from ${region.city} / ${region.country}`
+            )
             this.connect()
           }, rnd(3) * 2000)
         } else {
