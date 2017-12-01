@@ -8,7 +8,7 @@ const MAX_REPEAT = process.env.MAX_REPEAT || 3
 const ROPE_DEBUG = process.env.ROPE_DEBUG || 0
 const ROPE_SERVER = process.env.ROPE_SERVER || 'http://0.0.0.0:3210'
 
-const api = ['mod2', 'talk', 'greet', 'string', 'square', 'random']
+const api = ['mod2', 'talk', 'greet', 'string', 'square', 'random', 'fail']
 const types = ['firefox', 'safari', 'chrome', 'opera', 'edge', 'node.js', 'go']
 const Nodes = {}
 
@@ -42,6 +42,7 @@ class SwarmNode extends RopeNode {
         'swarm.string': (i, cb) => cb(null, `${i}`),
         'swarm.square': (i, cb) => cb(null, i ** i),
         'swarm.random': (i = 100, cb) => cb(null, rnd(i)),
+        'swarm.fail': (i, cb) => cb({ message: 'failed :(' }),
       },
       {
         region,
